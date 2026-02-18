@@ -9,9 +9,9 @@ export function Sidebar() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
 
-  if (status === "unauthenticated" || !session) {
-    return null;
-  }
+ // if (status === "unauthenticated" || !session) {
+   // return null;
+  //}
 
   // Check if the logged-in user is the Manager
   // This makes it case-insensitive and checks for 'manager' anywhere in the name or email
