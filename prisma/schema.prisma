@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  MANAGER
+  LEAD
+  ANALYST
+  USER
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model User {
+  id    String  @id @default(cuid())
+  name  String?
+  email String  @unique
+  role  Role    @default(ANALYST)
+  team  String  @default("BPET")
+}
+
+model Task {
+  id           String   @id @default(cuid())
+  title        String
+  status       String   @default("TODO")
+  priority     Priority @default(MEDIUM)
+  team         String   @default("BPET")
+  assignedTo   String?
+  assignedToId String?
+  reports      Report[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Report {
+  id         String   @id @default(cuid())
+  fileName   String
+  fileType   String?
+  fileSize   Int?
+  fileUrl    String
+  taskId     String
+  task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  uploadedBy String
+  createdAt  DateTime @default(now())
+}
